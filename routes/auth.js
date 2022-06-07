@@ -6,6 +6,7 @@ const {
   confirmOTP,
 } = require("../controllers/authController");
 const { verify } = require("jsonwebtoken");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const router = express.Router();
 
@@ -77,11 +78,15 @@ router.get("/confirmation/:token", async (req, res) => {
       res.status(400).json({
         message: "An error ocurred while validating the email: no matching id.",
       });
-    res.status(200).json({ status: "validated" });
+    res.status(302).redirect(process.env.EMAIL_CONFIRMATION_BACKL_URL);
   } catch (error) {
     res.status(500).json({ message: error.message });
     process.exit(1);
   }
+});
+
+router.get("/refresh-token", isAuthenticated, async (req, res) => {
+  res.status(200).json({ token: req.token, refreshToken: req.headers.refresh });
 });
 
 module.exports = router;

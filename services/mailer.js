@@ -1,19 +1,11 @@
 const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
+const config = require("../config/mailer");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: process.env.SMTP_PORT || 587,
-  secure: process.env.SMTP_SECURE || false,
-  pool: process.env.MAILER_POOL || false,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.APP_PASSWORD,
-  },
-});
+const transporter = nodemailer.createTransport(config);
 
 transporter.use(
   "compile",

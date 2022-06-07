@@ -4,6 +4,7 @@ const isAuthenticated = (req, res, next) => {
   try {
     if (!req.headers.authorization)
       return res.status(401).json({ mesage: "Unauthorized" });
+
     const accessToken = req.headers.authorization.split(" ")[1];
     const token = verify(accessToken, process.env.JWT_SECRET);
 
@@ -20,9 +21,8 @@ const isAuthenticated = (req, res, next) => {
           expiresIn: "30m",
         });
     }
-
-    res.json({ token: newAccessToken, refreshToken: req.headers.refresh });
-
+    req.id = token.user_id;
+    req.token = newAccessToken;
     next();
   } catch (error) {
     return res.status(401).json({ message: error.message });

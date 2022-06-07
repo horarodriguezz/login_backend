@@ -2,14 +2,13 @@ const speakeasy = require("speakeasy");
 
 const generateUserSecret = () => {
   const { base32 } = speakeasy.generateSecret({});
-  console.log(base32);
+
   return base32;
 };
 
 const generateOtpUrl = (secret, label = "Test App") => {
-  console.log(secret);
   const url = `otpauth://totp/${label}?secret=${secret}`;
-  console.log(url);
+
   return url;
 };
 

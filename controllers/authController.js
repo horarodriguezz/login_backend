@@ -104,7 +104,7 @@ const authenticate = async (email, password) => {
       const token = sign(
         { user_id: user.user_id },
         process.env.MAIL_CONFIRMATION_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "4h" }
       );
       const { messageId, rejected } = await sendConfirmationEmail(
         user.email,
@@ -133,7 +133,8 @@ const authenticate = async (email, password) => {
     //if exists and it's validated, check if password is valid
 
     const match = await compareWithHash(password, user.user_password);
-    if (!match) return { status: 400, message: "Incorrect password." };
+    if (!match)
+      return { status: 400, json: { message: "Incorrect password." } };
 
     let token;
 
@@ -158,7 +159,7 @@ const authenticate = async (email, password) => {
     });
 
     return {
-      status: 100,
+      status: 200,
       json: {
         message:
           "Please, insert the 6 digits code, you can get it from Microsoft Authenticator App.",

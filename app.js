@@ -26,9 +26,11 @@ if (cluster.isMaster) {
   const cookieParser = require("cookie-parser");
   const logger = require("morgan");
   const dotenv = require("dotenv");
+  const cors = require("cors");
 
   const authRouter = require("./routes/auth");
   const testRouter = require("./routes/test");
+  const usersRouter = require("./routes/users");
 
   dotenv.config();
   const app = express();
@@ -38,9 +40,11 @@ if (cluster.isMaster) {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
+  app.use(cors());
 
   app.use("/auth", authRouter);
   app.use("/test", testRouter);
+  app.use("/users", usersRouter);
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server listening on port: ${process.env.PORT || 3000}`);
