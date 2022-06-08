@@ -27,7 +27,6 @@ if (cluster.isMaster) {
   const logger = require("morgan");
   const dotenv = require("dotenv");
   const cors = require("cors");
-  const corsConfig = require("./config/cors");
 
   const authRouter = require("./routes/auth");
   const testRouter = require("./routes/test");
@@ -41,7 +40,7 @@ if (cluster.isMaster) {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
-  app.use(cors(corsConfig));
+  app.use(cors());
 
   app.options("*", cors());
   app.use("/auth", authRouter);
