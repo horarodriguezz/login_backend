@@ -32,7 +32,10 @@ if (cluster.isMaster) {
   const testRouter = require("./routes/test");
   const usersRouter = require("./routes/users");
 
-  dotenv.config();
+  dotenv.config({
+    origin: true,
+    methods: ["GET, POST, OPTIONS"],
+  });
   const app = express();
 
   app.use(logger("dev"));
