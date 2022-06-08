@@ -32,10 +32,7 @@ if (cluster.isMaster) {
   const testRouter = require("./routes/test");
   const usersRouter = require("./routes/users");
 
-  dotenv.config({
-    origin: true,
-    methods: ["GET, POST, OPTIONS"],
-  });
+  dotenv.config();
   const app = express();
 
   app.use(logger("dev"));
@@ -43,7 +40,12 @@ if (cluster.isMaster) {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
-  app.use(cors({ origin: true }));
+  app.use(
+    cors({
+      origin: true,
+      methods: ["GET, POST, OPTIONS"],
+    })
+  );
 
   app.use("/auth", authRouter);
   app.use("/test", testRouter);
