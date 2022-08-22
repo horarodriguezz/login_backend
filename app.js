@@ -26,8 +26,6 @@ if (cluster.isMaster) {
   const cookieParser = require("cookie-parser");
   const logger = require("morgan");
   const dotenv = require("dotenv");
-  const cors = require("cors");
-
   const authRouter = require("./routes/auth");
   const testRouter = require("./routes/test");
   const usersRouter = require("./routes/users");
@@ -40,13 +38,13 @@ if (cluster.isMaster) {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
-  const corsOpts = {
-    origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
-  };
-
-  app.use(cors(corsOpts));
+  app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    next();
+  });
 
   app.use("/auth", authRouter);
   app.use("/test", testRouter);
