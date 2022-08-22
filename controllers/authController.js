@@ -18,7 +18,7 @@ const register = async (req) => {
     sql = "SELECT * FROM users WHERE email = ?";
     values = [email];
     const exists = await query(sql, values);
-    if (exists.length > 0)
+    if (exists?.length > 0)
       return { status: 400, message: "Email already in use." };
 
     //if not exists create the user
