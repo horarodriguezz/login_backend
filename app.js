@@ -40,15 +40,17 @@ if (cluster.isMaster) {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
-
-  const corsOptions = {
-    origin: true,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  const corsOpts = {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
   };
 
-  app.use("/auth", cors(corsOptions), authRouter);
-  app.use("/test", cors(corsOptions), testRouter);
-  app.use("/users", cors(corsOptions), usersRouter);
+  app.use(cors(corsOpts));
+
+  app.use("/auth", authRouter);
+  app.use("/test", testRouter);
+  app.use("/users", usersRouter);
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server listening on port: ${process.env.PORT || 3000}`);
